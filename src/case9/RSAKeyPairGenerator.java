@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.security.*;
 import java.util.Base64;
 
-public class RSA {
+public class RSAKeyPairGenerator {
 
     private PrivateKey privateKey;
     private PublicKey publicKey;
 
-    public RSA() throws NoSuchAlgorithmException {
+    public RSAKeyPairGenerator() throws NoSuchAlgorithmException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
         keyGen.initialize(1024);
         KeyPair pair = keyGen.generateKeyPair();
