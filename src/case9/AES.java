@@ -31,7 +31,17 @@ public class AES {
         }
     }
  
-    public static String encrypt(String strToEncrypt, String secret)
+    public static SecretKeySpec getSecretKey() 
+    {
+		return secretKey;
+	}
+
+	public static void setSecretKey(SecretKeySpec secretKey) 
+	{
+		AES.secretKey = secretKey;
+	}
+
+	public static String encrypt(String strToEncrypt, String secret)
     {
         try
         {

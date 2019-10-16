@@ -40,7 +40,27 @@ public class RSAUtil {
         return publicKey;
     }
 
-    public static PrivateKey getPrivateKey(String base64PrivateKey){
+    public static String getPublicKey() 
+    {
+		return publicKey;
+	}
+
+	public static void setPublicKey(String publicKey) 
+	{
+		RSAUtil.publicKey = publicKey;
+	}
+
+	public static String getPrivateKey() 
+	{
+		return privateKey;
+	}
+
+	public static void setPrivateKey(String privateKey) 
+	{
+		RSAUtil.privateKey = privateKey;
+	}
+
+	public static PrivateKey getPrivateKey(String base64PrivateKey){
         PrivateKey privateKey = null;
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64PrivateKey.getBytes()));
         KeyFactory keyFactory = null;

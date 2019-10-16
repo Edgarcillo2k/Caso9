@@ -12,7 +12,9 @@ import javax.crypto.NoSuchPaddingException;
 public class Case9 
 {
 	public static void main(String[] args) throws IllegalBlockSizeException, InvalidKeyException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, IOException {
-        RSAUtil rsaUtil = new RSAUtil();
+        Window window = new Window();
+        /*
+		RSAUtil rsaUtil = new RSAUtil();
 		try {
             String encryptedString = Base64.getEncoder().encodeToString(rsaUtil.encrypt("Dhiraj is the author"));
             System.out.println(encryptedString);
@@ -21,5 +23,6 @@ public class Case9
         } catch (NoSuchAlgorithmException e) {
             System.err.println(e.getMessage());
         }
+        */
     }
 }
