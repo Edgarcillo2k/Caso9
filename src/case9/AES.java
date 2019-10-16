@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.Base64;
 import javax.crypto.Cipher;
@@ -18,7 +20,7 @@ public class AES {
         MessageDigest digest = null;
         try {
             key = myKey.getBytes("UTF-8");
-            digest = MessageDigest.getInstance("SHA3_256");
+            digest = MessageDigest.getInstance("SHA3-384");
             key = digest.digest(myKey.getBytes(StandardCharsets.UTF_8));
             key = Arrays.copyOf(key, 16);
             secretKey = new SecretKeySpec(key, "AES");

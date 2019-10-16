@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -27,12 +26,19 @@ public class Window extends JFrame implements ActionListener
 	private JButton sendText = new JButton("Send text");
 	private JButton resetPattern = new JButton("Reset pattern");
 	private JLabel text = new JLabel("Text: ");
+	private JLabel keyEncrypted = new JLabel("");
 	private JTextField textInput = new JTextField("");
-	private AES aes = new AES();
+	private JButton decryptText = new JButton("Decrypt text");
+	private JLabel decryptedText = new JLabel("Decrypted text: ");
+	private JButton changeModeButton = new JButton("Change mode");
+	private boolean mode = false;
+	private String encryptedMessage = null;
+	private AES aes;
 	private RSAUtil rsa;
 	public Window() 
     {
 		try {
+			aes = new AES();
 			rsa = new RSAUtil();
 		} catch (NoSuchAlgorithmException | IOException e) {
 			// TODO Auto-generated catch block
@@ -57,6 +63,17 @@ public class Window extends JFrame implements ActionListener
 		sendText.setBounds(0,430,330,30);
         sendText.addActionListener(this);
 		add(sendText);
+		decryptText.setBounds(0,430,330,30);
+        decryptText.addActionListener(this);
+		add(decryptText);
+		decryptedText.setBounds(10,470,290,20);
+		add(decryptedText);
+		keyEncrypted.setBounds(40,400,290,20);
+		add(keyEncrypted);
+		decryptedText.setVisible(false);
+		changeModeButton.setBounds(0,500,330,30);
+        changeModeButton.addActionListener(this);
+		add(changeModeButton);
         
 		buttons = new JButton[9];
 		for(int row = 0;row<3;row++) {
@@ -70,6 +87,15 @@ public class Window extends JFrame implements ActionListener
 			}
 		}
     }
+	public void changeMode()
+	{
+		mode = !mode;
+		sendText.setVisible(mode);
+		textInput.setVisible(mode);
+		decryptedText.setVisible(!mode);
+		decryptedText.setText("Decrypted text: ");
+		keyEncrypted.setVisible(!mode);
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -82,14 +108,31 @@ public class Window extends JFrame implements ActionListener
 		}
 		if(e.getSource() == sendText) {
 			try {
-				String encryptedText = Base64.getEncoder().encodeToString(rsa.encrypt(textInput.getText()));
-				String encryptedKey = aes.encrypt(rsa.getPrivateKey(),pattern.getText());
+				String encryptedText = rsa.encrypt(textInput.getText());
+				String encryptedKey = aes.encrypt(rsa.getPrivateKey(),pattern.getText());				
 				//enviar por el socket
 			} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
 					| NoSuchAlgorithmException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			return;
+		}
+		if(e.getSource() == decryptText) {
+			try {
+				String decryptedKey = aes.decrypt(keyEncrypted.getText(), pattern.getText());
+				rsa.setPrivateKey(decryptedKey);
+				String decrypted = rsa.decrypt(encryptedMessage);
+				decryptedText.setText("Decrypted text: " + decrypted);
+			}
+			catch(Exception e1) {
+				// TODO Auto-generated catch block
+				decryptedText.setText("Decrypted text: null");
+			}
+		}
+		if(e.getSource() == changeModeButton) {
+			changeMode();
+			return;
 		}
 		for(int i = 0;i<9;i++) {
 			if(e.getSource()==buttons[i]) {
