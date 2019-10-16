@@ -82,8 +82,8 @@ public class Window extends JFrame implements ActionListener
 		}
 		if(e.getSource() == sendText) {
 			try {
-				String encryptedString = Base64.getEncoder().encodeToString(rsa.encrypt(textInput.getText()));
-				aes.encrypt(rsa.getPrivateKey(),pattern.getText());
+				String encryptedText = Base64.getEncoder().encodeToString(rsa.encrypt(textInput.getText()));
+				String encryptedKey = aes.encrypt(rsa.getPrivateKey(),pattern.getText());
 				//enviar por el socket
 			} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
 					| NoSuchAlgorithmException e1) {
