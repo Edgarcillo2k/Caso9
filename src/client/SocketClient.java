@@ -31,6 +31,7 @@ public class SocketClient extends Observable implements Runnable {
 	public SocketClient(String pIpAddress) {
 		try 
 		{
+			this.msg = null;
 			this.socket = new Socket(pIpAddress, PORT);
 			this.input = new DataInputStream(socket.getInputStream());
 			this.output = new DataOutputStream(socket.getOutputStream());
@@ -99,6 +100,7 @@ public class SocketClient extends Observable implements Runnable {
 		} 
 		catch (Exception ex)
 		{
+			this.msg = null;
 			ex.printStackTrace();
 		}
 	}
