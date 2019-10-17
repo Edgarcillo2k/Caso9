@@ -20,7 +20,7 @@ public class AES {
         MessageDigest digest = null;
         try {
             key = myKey.getBytes("UTF-8");
-            digest = MessageDigest.getInstance("SHA3-384");
+            digest = MessageDigest.getInstance("SHA-256");
             key = digest.digest(myKey.getBytes(StandardCharsets.UTF_8));
             key = Arrays.copyOf(key, 16);
             secretKey = new SecretKeySpec(key, "AES");

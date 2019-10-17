@@ -14,6 +14,7 @@ public class SocketClient extends Observable implements Runnable {
 	private DataOutputStream output;
 	private boolean active;
 	private final int PORT = 4000;
+	private Message msg;
 	
 	public SocketClient(Socket pSocket) {
 		this.socket = pSocket;
@@ -90,6 +91,7 @@ public class SocketClient extends Observable implements Runnable {
 			{
 				String read = input.readUTF();
 				Message msg = new Message(read);
+				this.msg = msg;
 				this.setChanged();
 				this.notifyObservers(msg);
 				Thread.sleep(50);
@@ -99,5 +101,13 @@ public class SocketClient extends Observable implements Runnable {
 		{
 			ex.printStackTrace();
 		}
+	}
+
+	public Message getMsg() {
+		return msg;
+	}
+
+	public void setMsg(Message msg) {
+		this.msg = msg;
 	}
 }

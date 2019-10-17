@@ -13,7 +13,12 @@ import javax.crypto.NoSuchPaddingException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+
+import client.SocketClient;
+import common.Message;
 
 public class Window extends JFrame implements ActionListener
 {
@@ -30,11 +35,13 @@ public class Window extends JFrame implements ActionListener
 	private JTextField textInput = new JTextField("");
 	private JButton decryptText = new JButton("Decrypt text");
 	private JLabel decryptedText = new JLabel("Decrypted text: ");
-	private JButton changeModeButton = new JButton("Change mode");
-	private boolean mode = false;
+	private JButton connect = new JButton("Connect");
+	private boolean mode = true;
 	private String encryptedMessage = null;
+	private JToggleButton chequearStatus = new javax.swing.JToggleButton("Chequear status");
 	private AES aes;
 	private RSAUtil rsa;
+	private SocketClient mySocket;
 	public Window() 
     {
 		try {
@@ -71,9 +78,12 @@ public class Window extends JFrame implements ActionListener
 		keyEncrypted.setBounds(40,400,290,20);
 		add(keyEncrypted);
 		decryptedText.setVisible(false);
-		changeModeButton.setBounds(0,500,330,30);
-        changeModeButton.addActionListener(this);
-		add(changeModeButton);
+		connect.setBounds(0,500,330,30);
+        connect.addActionListener(this);
+		add(connect);
+		chequearStatus.setBounds(0,550,330,30);
+        chequearStatus.addActionListener(this);
+		add(chequearStatus);
         
 		buttons = new JButton[9];
 		for(int row = 0;row<3;row++) {
@@ -98,6 +108,9 @@ public class Window extends JFrame implements ActionListener
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == chequearStatus) {
+			chequearStatusActionPerformed(e);
+		}
 		// TODO Auto-generated method stub
 		if(e.getSource() == resetPattern) {
 			pattern.setText("");
@@ -110,6 +123,10 @@ public class Window extends JFrame implements ActionListener
 			try {
 				String encryptedText = rsa.encrypt(textInput.getText());
 				String encryptedKey = aes.encrypt(rsa.getPrivateKey(),pattern.getText());				
+				
+				Message msg = new Message(1);
+	            msg.addField(encryptedKey, encryptedText);
+	            mySocket.sendMsg(msg);
 				//enviar por el socket
 			} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
 					| NoSuchAlgorithmException e1) {
@@ -124,14 +141,20 @@ public class Window extends JFrame implements ActionListener
 				rsa.setPrivateKey(decryptedKey);
 				String decrypted = rsa.decrypt(encryptedMessage);
 				decryptedText.setText("Decrypted text: " + decrypted);
+				Message msg = new Message(2);
+	            msg.addField("found_msg", decrypted);
+	            mySocket.sendMsg(msg);
 			}
 			catch(Exception e1) {
 				// TODO Auto-generated catch block
 				decryptedText.setText("Decrypted text: null");
 			}
 		}
-		if(e.getSource() == changeModeButton) {
-			changeMode();
+		if(e.getSource() == connect) {
+			mySocket = new SocketClient("127.0.0.1");
+	        Message msg = new Message(3);
+	        msg.addField("teamname", "Team EdgarM"); // me registro dentro de un team
+	        mySocket.sendMsg(msg);
 			return;
 		}
 		for(int i = 0;i<9;i++) {
@@ -144,4 +167,32 @@ public class Window extends JFrame implements ActionListener
 			}
 		}
 	}
+	private void chequearStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkearStatusActionPerformed
+        switch (mySocket.getMsg().getType()) {
+            case 0:
+            	if(!mode) {
+            		changeMode();
+            	}
+            	else {
+            		pattern.setText("");
+        			for(int i = 0;i<9;i++) {
+        				buttons[i].setForeground(Color.black);
+        			}
+            	}
+            	JOptionPane.showMessageDialog(this, "Has sido seleccionado para crear el reto!");
+                break;
+            case 1:
+            	if(mode) {
+	            	encryptedMessage = mySocket.getMsg().getValue("encrypted_msg");
+	            	keyEncrypted.setText(mySocket.getMsg().getValue("encrypted_priv"));
+	            	changeMode();
+            	}
+            	else {
+            		decryptedText.setText("Decrypted text: ");
+            	}
+            	break;
+            default:
+                JOptionPane.showMessageDialog(this, "No has sido seleccionado para crear el reto :(");
+        }
+    }
 }
