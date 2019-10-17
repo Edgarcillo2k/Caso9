@@ -125,7 +125,8 @@ public class Window extends JFrame implements ActionListener
 				String encryptedKey = aes.encrypt(rsa.getPrivateKey(),pattern.getText());				
 				
 				Message msg = new Message(1);
-	            msg.addField(encryptedKey, encryptedText);
+	            msg.addField("encrypted_priv",encryptedKey);
+	            msg.addField("encrypted_msg",encryptedText);
 	            mySocket.sendMsg(msg);
 				//enviar por el socket
 			} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
@@ -185,6 +186,7 @@ public class Window extends JFrame implements ActionListener
             	if(mode) {
 	            	encryptedMessage = mySocket.getMsg().getValue("encrypted_msg");
 	            	keyEncrypted.setText(mySocket.getMsg().getValue("encrypted_priv"));
+	            	JOptionPane.showMessageDialog(this, "Desencripte el reto");
 	            	changeMode();
             	}
             	else {
