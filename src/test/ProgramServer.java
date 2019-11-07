@@ -1,6 +1,7 @@
 package test;
 
 import java.io.IOException;
+
 import client.SocketClient;
 import common.Message;
 
@@ -29,7 +30,7 @@ public class ProgramServer {
 			{
 				"type": "1", // challenge
 				"encrypted_msg" : "",
-				"encrypted_priv": "",
+				"encrypted_priv": ""
 			}
 
 			{
@@ -39,19 +40,25 @@ public class ProgramServer {
 
 			{
 				"type": "3", // checkin my team
-				"teamname" : ""
+				"teamname" : "",
+				"nickname" : ""
 			}
 
 		*/
 		
+		
 		Message msg = new Message(3);
 		msg.addField("teamname", "Team A"); // me registro dentro de un team
+		msg.addField("nickname", "Pedro");
 		c1.sendMsg(msg);
+		msg.addField("nickname", "Maria");
 		c3.sendMsg(msg);
 		
 		msg = new Message(3);
 		msg.addField("teamname","Team B");
+		msg.addField("nickname", "Ana");
 		c2.sendMsg(msg);
+		msg.addField("nickname", "Jose");
 		c4.sendMsg(msg);
 		
 		try {
@@ -63,6 +70,7 @@ public class ProgramServer {
 		
 		msg = new Message(2); // aviso que resolvi el encrypted
 		msg.addField("found_msg", "Hola hola lo logré");
-		c3.sendMsg(msg);
+		c3.sendMsg(msg); 
+		
 	}
 }
