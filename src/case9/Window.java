@@ -42,7 +42,8 @@ public class Window extends JFrame implements ActionListener
 	private AES aes;
 	private RSAUtil rsa;
 	private SocketClient mySocket;
-	public Window() 
+	private String ip;
+	public Window(String pIp) 
     {
 		try {
 			aes = new AES();
@@ -51,6 +52,7 @@ public class Window extends JFrame implements ActionListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.ip = pIp;
 		setBounds(0,0,1080,720);
         setVisible(true);
         setResizable(false);
@@ -152,9 +154,9 @@ public class Window extends JFrame implements ActionListener
 			}
 		}
 		if(e.getSource() == connect) {
-			mySocket = new SocketClient("127.0.0.1");
+			mySocket = new SocketClient(this.ip);
 	        Message msg = new Message(3);
-	        msg.addField("teamname", "Team EdgarM"); // me registro dentro de un team
+	        msg.addField("teamname", "Team A"); // me registro dentro de un team
 	        mySocket.sendMsg(msg);
 			return;
 		}
@@ -169,7 +171,8 @@ public class Window extends JFrame implements ActionListener
 		}
 	}
 	private void chequearStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkearStatusActionPerformed
-        switch (mySocket.getMsg().getType()) {
+        try {
+		switch (mySocket.getMsg().getType()) {
             case 0:
             	if(!mode) {
             		changeMode();
@@ -195,6 +198,9 @@ public class Window extends JFrame implements ActionListener
             	break;
             default:
                 JOptionPane.showMessageDialog(this, "No has sido seleccionado para crear el reto :(");
+        }
+        }catch(Exception e) {
+        	JOptionPane.showMessageDialog(this, "No ha llegado nada");
         }
     }
 }

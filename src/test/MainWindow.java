@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import common.Message;
-import server.ServerService;
+import gameserver.ServerService;
 
 public class MainWindow  extends JFrame implements IConstants, ActionListener {
 	private ServerService server;
@@ -55,11 +55,8 @@ public class MainWindow  extends JFrame implements IConstants, ActionListener {
 		}
 		
 		if (boton.getName().compareTo("next")==0) {
-			for(String teamname: server.getTeamNames()) 
-			{
-				System.out.println("Enviando request de reto a team "+teamname);
-				server.sendToOneRandom(teamname, new Message(0));
-			}
+			System.out.println("Enviando request de reto a los teams ");
+			server.sendToOneRandom(new Message(0));
 		}		
 	}
 }

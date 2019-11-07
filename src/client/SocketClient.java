@@ -57,7 +57,8 @@ public class SocketClient extends Observable implements Runnable {
 			result = true;
 		} catch (Exception ex) 
 		{
-			ex.printStackTrace();
+			System.out.println("Closing connection");
+			close();
 		}
 		return result;
 	}
@@ -91,7 +92,6 @@ public class SocketClient extends Observable implements Runnable {
 			{
 				String read = input.readUTF();
 				Message msg = new Message(read);
-				this.msg = msg;
 				this.setChanged();
 				this.notifyObservers(msg);
 				Thread.sleep(50);
@@ -99,15 +99,16 @@ public class SocketClient extends Observable implements Runnable {
 		} 
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			this.notifyObservers(this);
 		}
 	}
-
-	public Message getMsg() {
-		return msg;
+	
+	public Message getMsg()
+	{
+		return this.msg;
 	}
-
-	public void setMsg(Message msg) {
+	public void setMsg(Message msg)
+	{
 		this.msg = msg;
 	}
 }
