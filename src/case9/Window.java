@@ -42,7 +42,8 @@ public class Window extends JFrame implements ActionListener
 	private AES aes;
 	private RSAUtil rsa;
 	private SocketClient mySocket;
-	public Window() 
+	private String ip;
+	public Window(String pIp) 
     {
 		try {
 			aes = new AES();
@@ -51,6 +52,7 @@ public class Window extends JFrame implements ActionListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.ip = pIp;
 		setBounds(0,0,1080,720);
         setVisible(true);
         setResizable(false);
@@ -152,7 +154,7 @@ public class Window extends JFrame implements ActionListener
 			}
 		}
 		if(e.getSource() == connect) {
-			mySocket = new SocketClient("172.19.49.41");
+			mySocket = new SocketClient(this.ip);
 	        Message msg = new Message(3);
 	        msg.addField("teamname", "Team A"); // me registro dentro de un team
 	        mySocket.sendMsg(msg);

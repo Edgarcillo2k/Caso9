@@ -78,7 +78,7 @@ public class Message {
 		} 
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			result = "";
 		}
 		return result;
 	}
