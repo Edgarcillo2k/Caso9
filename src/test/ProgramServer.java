@@ -16,13 +16,12 @@ public class ProgramServer {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		
+		/*
 		SocketClient c1 = new SocketClient("127.0.0.1"); // conecto
 		SocketClient c2 = new SocketClient("127.0.0.1");
 		SocketClient c3 = new SocketClient("127.0.0.1");
 		SocketClient c4 = new SocketClient("127.0.0.1");
 
-		/*
 			{
 				"type" : "0", // selected for challenge
 			}
@@ -43,8 +42,6 @@ public class ProgramServer {
 				"teamname" : "",
 				"nickname" : ""
 			}
-
-		*/
 		
 		
 		Message msg = new Message(3);
@@ -71,6 +68,7 @@ public class ProgramServer {
 		msg = new Message(2); // aviso que resolvi el encrypted
 		msg.addField("found_msg", "Hola hola lo logré");
 		c3.sendMsg(msg); 
+		*/
 		
 	}
 }

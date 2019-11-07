@@ -12,6 +12,6 @@ import javax.crypto.NoSuchPaddingException;
 public class Case9 
 {
 	public static void main(String[] args) throws IllegalBlockSizeException, InvalidKeyException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, IOException {
-        Window window = new Window();
+        Window window = new Window("127.0.0.1");
     }
 }
